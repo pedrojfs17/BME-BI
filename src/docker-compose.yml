@@ -1,0 +1,20 @@
+version: '2.12'
+
+services:
+  postgres:
+    image: postgres:alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgresbi
+    ports:
+      - "5432:5432"
+    restart: always
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: postgres@bi.com
+      PGADMIN_DEFAULT_PASSWORD: postgresbi
+    ports:
+      - "8080:80"
+    restart: always
