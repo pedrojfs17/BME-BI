@@ -24,10 +24,10 @@ CREATE TABLE country_metrics
     pm25            FLOAT,
     pm10            FLOAT,
     no2             FLOAT,
-    total_deaths    FLOAT,
-    indoor_deaths   FLOAT,
-    outdoor_deaths  FLOAT,
-    ozone_deaths    FLOAT
+    total_deaths    INTEGER,
+    indoor_deaths   INTEGER,
+    outdoor_deaths  INTEGER,
+    ozone_deaths    INTEGER
 );
 
 CREATE TABLE ozone_hole

@@ -629,16 +629,6 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Remove Duplicate Columns 3</from>
-      <to>Update Number Precision</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
-      <from>Update Number Precision</from>
-      <to>Filter rows</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
       <from>Remove Nulls</from>
       <to>Fill Null Codes</to>
       <enabled>Y</enabled>
@@ -671,6 +661,26 @@
     <hop>
       <from>Filter rows</from>
       <to>Wait for Countries</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Remove Duplicate Columns 3</from>
+      <to>Calculate Number of Deaths</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Calculate Number of Deaths</from>
+      <to>Update Number Precision</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Update Number Precision</from>
+      <to>Remove Unused</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Remove Unused</from>
+      <to>Filter rows</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -1412,8 +1422,8 @@
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1040</xloc>
-      <yloc>688</yloc>
+      <xloc>1392</xloc>
+      <yloc>704</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1556,7 +1566,7 @@ if (Code === null) {
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <send_true_to>Wait for Countries</send_true_to>
+    <send_true_to/>
     <send_false_to/>
     <compare>
       <condition>
@@ -1584,8 +1594,8 @@ if (Code === null) {
       </output>
     </remotesteps>
     <GUI>
-      <xloc>592</xloc>
-      <yloc>688</yloc>
+      <xloc>992</xloc>
+      <yloc>704</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1692,7 +1702,7 @@ if (Code === null) {
       </output>
     </remotesteps>
     <GUI>
-      <xloc>592</xloc>
+      <xloc>672</xloc>
       <yloc>544</yloc>
       <draw>Y</draw>
     </GUI>
@@ -1962,6 +1972,10 @@ if (Code === null) {
         <rename/>
       </field>
       <field>
+        <name>Population</name>
+        <rename/>
+      </field>
+      <field>
         <name>CO2 Emissions</name>
         <rename/>
       </field>
@@ -2015,6 +2029,10 @@ if (Code === null) {
       </field>
       <field>
         <name>Year</name>
+        <rename/>
+      </field>
+      <field>
+        <name>Population</name>
         <rename/>
       </field>
       <field>
@@ -2086,6 +2104,10 @@ if (Code === null) {
         <rename/>
       </field>
       <field>
+        <name>Population</name>
+        <rename/>
+      </field>
+      <field>
         <name>CO2 Emissions</name>
         <rename/>
       </field>
@@ -2115,19 +2137,19 @@ if (Code === null) {
       </field>
       <field>
         <name>Total Pollution Deaths</name>
-        <rename/>
+        <rename>total_deaths</rename>
       </field>
       <field>
         <name>Indoor Pollution Deaths</name>
-        <rename/>
+        <rename>indoor_deaths</rename>
       </field>
       <field>
         <name>Outdoor Pollution Deaths</name>
-        <rename/>
+        <rename>outdoor_deaths</rename>
       </field>
       <field>
         <name>Outdoor Ozone Pollution Deaths</name>
-        <rename/>
+        <rename>ozone_deaths</rename>
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -2140,8 +2162,8 @@ if (Code === null) {
       </output>
     </remotesteps>
     <GUI>
-      <xloc>208</xloc>
-      <yloc>688</yloc>
+      <xloc>176</xloc>
+      <yloc>704</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -2271,6 +2293,52 @@ if (Code === null) {
     </GUI>
   </step>
   <step>
+    <name>Rename</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <name>Country Name</name>
+      </field>
+      <field>
+        <name>Year</name>
+      </field>
+      <field>
+        <name>Average PM2.5</name>
+        <rename>PM2.5</rename>
+      </field>
+      <field>
+        <name>Average PM10</name>
+        <rename>PM10</rename>
+      </field>
+      <field>
+        <name>Average NO2</name>
+        <rename>NO2</rename>
+      </field>
+      <select_unspecified>N</select_unspecified>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>752</xloc>
+      <yloc>432</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
     <name>Rename CO2 Columns</name>
     <type>SelectValues</type>
     <description/>
@@ -2284,15 +2352,12 @@ if (Code === null) {
     <fields>
       <field>
         <name>Country</name>
-        <rename/>
       </field>
       <field>
         <name>Code</name>
-        <rename/>
       </field>
       <field>
         <name>Year</name>
-        <rename/>
       </field>
       <field>
         <name>Population(2022)</name>
@@ -2300,15 +2365,12 @@ if (Code === null) {
       </field>
       <field>
         <name>Area</name>
-        <rename/>
       </field>
       <field>
         <name>Density</name>
-        <rename/>
       </field>
       <field>
         <name>CO2 Emissions</name>
-        <rename/>
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -2340,7 +2402,6 @@ if (Code === null) {
     <fields>
       <field>
         <name>Country</name>
-        <rename/>
       </field>
       <field>
         <name>newCode</name>
@@ -2348,23 +2409,18 @@ if (Code === null) {
       </field>
       <field>
         <name>Year</name>
-        <rename/>
       </field>
       <field>
         <name>Population</name>
-        <rename/>
       </field>
       <field>
         <name>Area</name>
-        <rename/>
       </field>
       <field>
         <name>Density</name>
-        <rename/>
       </field>
       <field>
         <name>CO2 Emissions</name>
-        <rename/>
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -2395,9 +2451,6 @@ if (Code === null) {
     </partitioning>
     <fields>
       <select_unspecified>N</select_unspecified>
-      <remove>
-        <name>Population</name>
-      </remove>
       <remove>
         <name>Area</name>
       </remove>
@@ -2991,9 +3044,9 @@ if (Code === null) {
       <meta>
         <name>Total Pollution Deaths</name>
         <rename>Total Pollution Deaths</rename>
-        <type>None</type>
+        <type>Integer</type>
         <length>10</length>
-        <precision>6</precision>
+        <precision>-2</precision>
         <conversion_mask/>
         <date_format_lenient>false</date_format_lenient>
         <date_format_locale/>
@@ -3008,9 +3061,9 @@ if (Code === null) {
       <meta>
         <name>Indoor Pollution Deaths</name>
         <rename>Indoor Pollution Deaths</rename>
-        <type>None</type>
+        <type>Integer</type>
         <length>10</length>
-        <precision>6</precision>
+        <precision>-2</precision>
         <conversion_mask/>
         <date_format_lenient>false</date_format_lenient>
         <date_format_locale/>
@@ -3025,9 +3078,9 @@ if (Code === null) {
       <meta>
         <name>Outdoor Pollution Deaths</name>
         <rename>Outdoor Pollution Deaths</rename>
-        <type>None</type>
+        <type>Integer</type>
         <length>10</length>
-        <precision>6</precision>
+        <precision>-2</precision>
         <conversion_mask/>
         <date_format_lenient>false</date_format_lenient>
         <date_format_locale/>
@@ -3042,9 +3095,9 @@ if (Code === null) {
       <meta>
         <name>Outdoor Ozone Pollution Deaths</name>
         <rename>Outdoor Ozone Pollution Deaths</rename>
-        <type>None</type>
+        <type>Integer</type>
         <length>10</length>
-        <precision>6</precision>
+        <precision>-2</precision>
         <conversion_mask/>
         <date_format_lenient>false</date_format_lenient>
         <date_format_locale/>
@@ -3066,8 +3119,8 @@ if (Code === null) {
       </output>
     </remotesteps>
     <GUI>
-      <xloc>432</xloc>
-      <yloc>688</yloc>
+      <xloc>608</xloc>
+      <yloc>704</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -3097,8 +3150,8 @@ if (Code === null) {
       </output>
     </remotesteps>
     <GUI>
-      <xloc>832</xloc>
-      <yloc>688</yloc>
+      <xloc>1168</xloc>
+      <yloc>704</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -3164,7 +3217,102 @@ if (Code === null) {
     </GUI>
   </step>
   <step>
-    <name>Rename</name>
+    <name>Calculate Number of Deaths</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <compatible>N</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>var new_total;
+var new_indoor;
+var new_outdoor;
+var new_ozone;
+
+if (total_deaths !== null) {
+	new_total = floor(total_deaths * (Population / 100000))
+} else {
+	new_total = null
+}
+
+if (indoor_deaths !== null) {
+	new_indoor = floor(indoor_deaths * (Population / 100000))
+} else {
+	new_indoor = null
+}
+
+if (outdoor_deaths !== null) {
+	new_outdoor = floor(outdoor_deaths * (Population / 100000))
+} else {
+	new_outdoor = null
+}
+
+if (ozone_deaths !== null) {
+	new_ozone = floor(ozone_deaths * (Population / 100000))
+} else {
+	new_ozone = null
+}</jsScript_script>
+      </jsScript>
+    </jsScripts>
+    <fields>
+      <field>
+        <name>new_total</name>
+        <rename>Total Pollution Deaths</rename>
+        <type>Number</type>
+        <length>16</length>
+        <precision>2</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>new_indoor</name>
+        <rename>Indoor Pollution Deaths</rename>
+        <type>Number</type>
+        <length>16</length>
+        <precision>2</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>new_outdoor</name>
+        <rename>Outdoor Pollution Deaths</rename>
+        <type>Number</type>
+        <length>16</length>
+        <precision>2</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>new_ozone</name>
+        <rename>Outdoor Ozone Pollution Deaths</rename>
+        <type>Number</type>
+        <length>16</length>
+        <precision>2</precision>
+        <replace>N</replace>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>400</xloc>
+      <yloc>704</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Remove Unused</name>
     <type>SelectValues</type>
     <description/>
     <distribute>Y</distribute>
@@ -3176,7 +3324,11 @@ if (Code === null) {
     </partitioning>
     <fields>
       <field>
-        <name>Country Name</name>
+        <name>Country</name>
+        <rename/>
+      </field>
+      <field>
+        <name>Code</name>
         <rename/>
       </field>
       <field>
@@ -3184,16 +3336,48 @@ if (Code === null) {
         <rename/>
       </field>
       <field>
-        <name>Average PM2.5</name>
-        <rename>PM2.5</rename>
+        <name>CO2 Emissions</name>
+        <rename/>
       </field>
       <field>
-        <name>Average PM10</name>
-        <rename>PM10</rename>
+        <name>Average Temperature</name>
+        <rename/>
       </field>
       <field>
-        <name>Average NO2</name>
-        <rename>NO2</rename>
+        <name>Maximum Temperature</name>
+        <rename/>
+      </field>
+      <field>
+        <name>Minimum Temperature</name>
+        <rename/>
+      </field>
+      <field>
+        <name>PM2.5</name>
+        <rename/>
+      </field>
+      <field>
+        <name>PM10</name>
+        <rename/>
+      </field>
+      <field>
+        <name>NO2</name>
+        <rename/>
+      </field>
+      <field>
+        <name>Total Pollution Deaths</name>
+        <rename/>
+      </field>
+      <field>
+        <name>Indoor Pollution Deaths</name>
+        <rename/>
+      </field>
+      <field>
+        <name>Outdoor Pollution Deaths</name>
+        <rename/>
+      </field>
+      <field>
+        <name>Outdoor Ozone Pollution Deaths</name>
+        <rename/>
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -3206,8 +3390,8 @@ if (Code === null) {
       </output>
     </remotesteps>
     <GUI>
-      <xloc>752</xloc>
-      <yloc>432</yloc>
+      <xloc>816</xloc>
+      <yloc>704</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
