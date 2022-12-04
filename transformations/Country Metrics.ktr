@@ -644,11 +644,6 @@
       <enabled>Y</enabled>
     </hop>
     <hop>
-      <from>Unique rows</from>
-      <to>Countries to SQL</to>
-      <enabled>Y</enabled>
-    </hop>
-    <hop>
       <from>Country Average</from>
       <to>Rename</to>
       <enabled>Y</enabled>
@@ -681,6 +676,36 @@
     <hop>
       <from>Remove Unused</from>
       <to>Filter rows</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Continents</from>
+      <to>Remove Cols</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Unique rows</from>
+      <to>Join Continents</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Remove Cols</from>
+      <to>Join Continents</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Join Continents</from>
+      <to>Change String Type</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Change String Type</from>
+      <to>Fill Micronesia</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Fill Micronesia</from>
+      <to>Countries to SQL</to>
       <enabled>Y</enabled>
     </hop>
   </order>
@@ -1015,6 +1040,101 @@
     </GUI>
   </step>
   <step>
+    <name>Calculate Number of Deaths</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <compatible>N</compatible>
+    <optimizationLevel>9</optimizationLevel>
+    <jsScripts>
+      <jsScript>
+        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>var new_total;
+var new_indoor;
+var new_outdoor;
+var new_ozone;
+
+if (total_deaths !== null) {
+	new_total = floor(total_deaths * (Population / 100000))
+} else {
+	new_total = null
+}
+
+if (indoor_deaths !== null) {
+	new_indoor = floor(indoor_deaths * (Population / 100000))
+} else {
+	new_indoor = null
+}
+
+if (outdoor_deaths !== null) {
+	new_outdoor = floor(outdoor_deaths * (Population / 100000))
+} else {
+	new_outdoor = null
+}
+
+if (ozone_deaths !== null) {
+	new_ozone = floor(ozone_deaths * (Population / 100000))
+} else {
+	new_ozone = null
+}</jsScript_script>
+      </jsScript>
+    </jsScripts>
+    <fields>
+      <field>
+        <name>new_total</name>
+        <rename>Total Pollution Deaths</rename>
+        <type>Number</type>
+        <length>16</length>
+        <precision>2</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>new_indoor</name>
+        <rename>Indoor Pollution Deaths</rename>
+        <type>Number</type>
+        <length>16</length>
+        <precision>2</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>new_outdoor</name>
+        <rename>Outdoor Pollution Deaths</rename>
+        <type>Number</type>
+        <length>16</length>
+        <precision>2</precision>
+        <replace>N</replace>
+      </field>
+      <field>
+        <name>new_ozone</name>
+        <rename>Outdoor Ozone Pollution Deaths</rename>
+        <type>Number</type>
+        <length>16</length>
+        <precision>2</precision>
+        <replace>N</replace>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>400</xloc>
+      <yloc>704</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
     <name>Change data types</name>
     <type>SelectValues</type>
     <description/>
@@ -1255,6 +1375,10 @@
         <column_name>density</column_name>
         <stream_name>Density</stream_name>
       </field>
+      <field>
+        <column_name>continent</column_name>
+        <stream_name>Continent</stream_name>
+      </field>
     </fields>
     <attributes/>
     <cluster_schema/>
@@ -1266,7 +1390,7 @@
     </remotesteps>
     <GUI>
       <xloc>1392</xloc>
-      <yloc>192</yloc>
+      <yloc>432</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -1961,35 +2085,27 @@ if (Code === null) {
     <fields>
       <field>
         <name>Country</name>
-        <rename/>
       </field>
       <field>
         <name>Code</name>
-        <rename/>
       </field>
       <field>
         <name>Year</name>
-        <rename/>
       </field>
       <field>
         <name>Population</name>
-        <rename/>
       </field>
       <field>
         <name>CO2 Emissions</name>
-        <rename/>
       </field>
       <field>
         <name>Average Temperature</name>
-        <rename/>
       </field>
       <field>
         <name>Maximum Temperature</name>
-        <rename/>
       </field>
       <field>
         <name>Minimum Temperature</name>
-        <rename/>
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -2021,47 +2137,36 @@ if (Code === null) {
     <fields>
       <field>
         <name>Country</name>
-        <rename/>
       </field>
       <field>
         <name>Code</name>
-        <rename/>
       </field>
       <field>
         <name>Year</name>
-        <rename/>
       </field>
       <field>
         <name>Population</name>
-        <rename/>
       </field>
       <field>
         <name>CO2 Emissions</name>
-        <rename/>
       </field>
       <field>
         <name>Average Temperature</name>
-        <rename/>
       </field>
       <field>
         <name>Maximum Temperature</name>
-        <rename/>
       </field>
       <field>
         <name>Minimum Temperature</name>
-        <rename/>
       </field>
       <field>
         <name>PM2.5</name>
-        <rename/>
       </field>
       <field>
         <name>PM10</name>
-        <rename/>
       </field>
       <field>
         <name>NO2</name>
-        <rename/>
       </field>
       <select_unspecified>N</select_unspecified>
     </fields>
@@ -2093,47 +2198,36 @@ if (Code === null) {
     <fields>
       <field>
         <name>Country</name>
-        <rename/>
       </field>
       <field>
         <name>Code</name>
-        <rename/>
       </field>
       <field>
         <name>Year</name>
-        <rename/>
       </field>
       <field>
         <name>Population</name>
-        <rename/>
       </field>
       <field>
         <name>CO2 Emissions</name>
-        <rename/>
       </field>
       <field>
         <name>Average Temperature</name>
-        <rename/>
       </field>
       <field>
         <name>Maximum Temperature</name>
-        <rename/>
       </field>
       <field>
         <name>Minimum Temperature</name>
-        <rename/>
       </field>
       <field>
         <name>PM2.5</name>
-        <rename/>
       </field>
       <field>
         <name>PM10</name>
-        <rename/>
       </field>
       <field>
         <name>NO2</name>
-        <rename/>
       </field>
       <field>
         <name>Total Pollution Deaths</name>
@@ -2289,6 +2383,76 @@ if (Code === null) {
     <GUI>
       <xloc>256</xloc>
       <yloc>304</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Remove Unused</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <field>
+        <name>Country</name>
+      </field>
+      <field>
+        <name>Code</name>
+      </field>
+      <field>
+        <name>Year</name>
+      </field>
+      <field>
+        <name>CO2 Emissions</name>
+      </field>
+      <field>
+        <name>Average Temperature</name>
+      </field>
+      <field>
+        <name>Maximum Temperature</name>
+      </field>
+      <field>
+        <name>Minimum Temperature</name>
+      </field>
+      <field>
+        <name>PM2.5</name>
+      </field>
+      <field>
+        <name>PM10</name>
+      </field>
+      <field>
+        <name>NO2</name>
+      </field>
+      <field>
+        <name>Total Pollution Deaths</name>
+      </field>
+      <field>
+        <name>Indoor Pollution Deaths</name>
+      </field>
+      <field>
+        <name>Outdoor Pollution Deaths</name>
+      </field>
+      <field>
+        <name>Outdoor Ozone Pollution Deaths</name>
+      </field>
+      <select_unspecified>N</select_unspecified>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>816</xloc>
+      <yloc>704</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
@@ -2723,7 +2887,7 @@ if (Code === null) {
       </output>
     </remotesteps>
     <GUI>
-      <xloc>1392</xloc>
+      <xloc>1264</xloc>
       <yloc>16</yloc>
       <draw>Y</draw>
     </GUI>
@@ -3217,8 +3381,8 @@ if (Code === null) {
     </GUI>
   </step>
   <step>
-    <name>Calculate Number of Deaths</name>
-    <type>ScriptValueMod</type>
+    <name>Continents</name>
+    <type>CsvInput</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -3227,74 +3391,64 @@ if (Code === null) {
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <compatible>N</compatible>
-    <optimizationLevel>9</optimizationLevel>
-    <jsScripts>
-      <jsScript>
-        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>var new_total;
-var new_indoor;
-var new_outdoor;
-var new_ozone;
-
-if (total_deaths !== null) {
-	new_total = floor(total_deaths * (Population / 100000))
-} else {
-	new_total = null
-}
-
-if (indoor_deaths !== null) {
-	new_indoor = floor(indoor_deaths * (Population / 100000))
-} else {
-	new_indoor = null
-}
-
-if (outdoor_deaths !== null) {
-	new_outdoor = floor(outdoor_deaths * (Population / 100000))
-} else {
-	new_outdoor = null
-}
-
-if (ozone_deaths !== null) {
-	new_ozone = floor(ozone_deaths * (Population / 100000))
-} else {
-	new_ozone = null
-}</jsScript_script>
-      </jsScript>
-    </jsScripts>
+    <filename>${PROJECT_PATH}\data\Continents.csv</filename>
+    <filename_field/>
+    <rownum_field/>
+    <include_filename>N</include_filename>
+    <separator>,</separator>
+    <enclosure>"</enclosure>
+    <header>Y</header>
+    <buffer_size>50000</buffer_size>
+    <lazy_conversion>Y</lazy_conversion>
+    <add_filename_result>N</add_filename_result>
+    <parallel>N</parallel>
+    <newline_possible>N</newline_possible>
+    <format>mixed</format>
+    <encoding/>
     <fields>
       <field>
-        <name>new_total</name>
-        <rename>Total Pollution Deaths</rename>
-        <type>Number</type>
-        <length>16</length>
-        <precision>2</precision>
-        <replace>N</replace>
+        <name>Entity</name>
+        <type>String</type>
+        <format/>
+        <currency>$</currency>
+        <decimal>.</decimal>
+        <group>,</group>
+        <length>31</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
       </field>
       <field>
-        <name>new_indoor</name>
-        <rename>Indoor Pollution Deaths</rename>
-        <type>Number</type>
-        <length>16</length>
-        <precision>2</precision>
-        <replace>N</replace>
+        <name>Code</name>
+        <type>String</type>
+        <format/>
+        <currency>$</currency>
+        <decimal>.</decimal>
+        <group>,</group>
+        <length>8</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
       </field>
       <field>
-        <name>new_outdoor</name>
-        <rename>Outdoor Pollution Deaths</rename>
-        <type>Number</type>
-        <length>16</length>
-        <precision>2</precision>
-        <replace>N</replace>
+        <name>Year</name>
+        <type>Integer</type>
+        <format>#</format>
+        <currency>$</currency>
+        <decimal>.</decimal>
+        <group>,</group>
+        <length>15</length>
+        <precision>0</precision>
+        <trim_type>none</trim_type>
       </field>
       <field>
-        <name>new_ozone</name>
-        <rename>Outdoor Ozone Pollution Deaths</rename>
-        <type>Number</type>
-        <length>16</length>
-        <precision>2</precision>
-        <replace>N</replace>
+        <name>Continent</name>
+        <type>String</type>
+        <format/>
+        <currency>$</currency>
+        <decimal>.</decimal>
+        <group>,</group>
+        <length>13</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
       </field>
     </fields>
     <attributes/>
@@ -3306,13 +3460,13 @@ if (ozone_deaths !== null) {
       </output>
     </remotesteps>
     <GUI>
-      <xloc>400</xloc>
-      <yloc>704</yloc>
+      <xloc>1392</xloc>
+      <yloc>16</yloc>
       <draw>Y</draw>
     </GUI>
   </step>
   <step>
-    <name>Remove Unused</name>
+    <name>Remove Cols</name>
     <type>SelectValues</type>
     <description/>
     <distribute>Y</distribute>
@@ -3324,59 +3478,11 @@ if (ozone_deaths !== null) {
     </partitioning>
     <fields>
       <field>
-        <name>Country</name>
+        <name>Entity</name>
         <rename/>
       </field>
       <field>
-        <name>Code</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Year</name>
-        <rename/>
-      </field>
-      <field>
-        <name>CO2 Emissions</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Average Temperature</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Maximum Temperature</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Minimum Temperature</name>
-        <rename/>
-      </field>
-      <field>
-        <name>PM2.5</name>
-        <rename/>
-      </field>
-      <field>
-        <name>PM10</name>
-        <rename/>
-      </field>
-      <field>
-        <name>NO2</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Total Pollution Deaths</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Indoor Pollution Deaths</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Outdoor Pollution Deaths</name>
-        <rename/>
-      </field>
-      <field>
-        <name>Outdoor Ozone Pollution Deaths</name>
+        <name>Continent</name>
         <rename/>
       </field>
       <select_unspecified>N</select_unspecified>
@@ -3390,8 +3496,127 @@ if (ozone_deaths !== null) {
       </output>
     </remotesteps>
     <GUI>
-      <xloc>816</xloc>
-      <yloc>704</yloc>
+      <xloc>1392</xloc>
+      <yloc>192</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Join Continents</name>
+    <type>MergeJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <join_type>LEFT OUTER</join_type>
+    <step1>Unique rows</step1>
+    <step2>Remove Cols</step2>
+    <keys_1>
+      <key>Country</key>
+    </keys_1>
+    <keys_2>
+      <key>Entity</key>
+    </keys_2>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1264</xloc>
+      <yloc>192</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Fill Micronesia</name>
+    <type>IfNull</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <replaceAllByValue/>
+    <replaceAllMask/>
+    <selectFields>Y</selectFields>
+    <selectValuesType>N</selectValuesType>
+    <setEmptyStringAll>N</setEmptyStringAll>
+    <valuetypes>
+      </valuetypes>
+    <fields>
+      <field>
+        <name>Continent</name>
+        <value>Oceania</value>
+        <mask/>
+        <set_empty_string>N</set_empty_string>
+      </field>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1392</xloc>
+      <yloc>304</yloc>
+      <draw>Y</draw>
+    </GUI>
+  </step>
+  <step>
+    <name>Change String Type</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <fields>
+      <select_unspecified>N</select_unspecified>
+      <meta>
+        <name>Continent</name>
+        <rename>Continent</rename>
+        <type>String</type>
+        <length>13</length>
+        <precision>-2</precision>
+        <conversion_mask/>
+        <date_format_lenient>false</date_format_lenient>
+        <date_format_locale/>
+        <date_format_timezone/>
+        <lenient_string_to_number>false</lenient_string_to_number>
+        <encoding/>
+        <decimal_symbol/>
+        <grouping_symbol/>
+        <currency_symbol/>
+        <storage_type>normal</storage_type>
+      </meta>
+    </fields>
+    <attributes/>
+    <cluster_schema/>
+    <remotesteps>
+      <input>
+      </input>
+      <output>
+      </output>
+    </remotesteps>
+    <GUI>
+      <xloc>1264</xloc>
+      <yloc>304</yloc>
       <draw>Y</draw>
     </GUI>
   </step>

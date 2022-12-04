@@ -395,7 +395,8 @@ CREATE TABLE country
     name       VARCHAR UNIQUE NOT NULL,
     population INTEGER        NOT NULL,
     area       INTEGER        NOT NULL,
-    density    INTEGER        NOT NULL
+    density    INTEGER        NOT NULL,
+    continent  CHAR(13)       NOT NULL
 );
 
 CREATE TABLE country_metrics

@@ -398,6 +398,9 @@
         <field>
           <name>${PROJECT_PATH}\data\Country Temperature Data (1750 - 2013).csv</name>
         </field>
+        <field>
+          <name>${PROJECT_PATH}\data\Continents.csv</name>
+        </field>
       </fields>
       <parallel>N</parallel>
       <draw>Y</draw>
@@ -420,7 +423,8 @@ CREATE TABLE country
     name       VARCHAR UNIQUE NOT NULL,
     population INTEGER        NOT NULL,
     area       INTEGER        NOT NULL,
-    density    INTEGER        NOT NULL
+    density    INTEGER        NOT NULL,
+    continent  CHAR(13)       NOT NULL
 );
 
 CREATE TABLE country_metrics

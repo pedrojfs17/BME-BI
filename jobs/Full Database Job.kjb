@@ -404,6 +404,9 @@
         <field>
           <name>${PROJECT_PATH}\data\Ozone Hole (1979 - 2021).csv</name>
         </field>
+        <field>
+          <name>${PROJECT_PATH}\data\Continents.csv</name>
+        </field>
       </fields>
       <parallel>N</parallel>
       <draw>Y</draw>
